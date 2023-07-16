@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    html페이지! 
+
+    <table border="1">
+        <tr>
+            <th>아이디</th>
+            <th>비밀번호</th>
+            <th>닉네임</th>
+        </tr>
+        {% for  item  in list%}
+        <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.pw}}</td>
+            <td>{{item.nick}}</td>
+            <td><button onclick="selectOne('{{item.id}}')">이 회원 정보만 조회</button></td>
+            <td><button onclick="update('{{item.id}}','{{item.pw}}','{{item.nick}}')">회원 정보 수정</button></td>
+            <td><button onclick="location.href='delete/{{item.id}}'">회원 정보 삭제</button></td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <h3>특정 회원 정보 조회</h3>
+
+    <table border="1">
+        <tr>
+            <th>아이디</th>
+            <th>비밀번호</th>
+            <th>닉네임</th>
+        </tr>
+       
+        <tr>
+            <td id="searchId"></td>
+            <td id="searchPw"></td>
+            <td id="searchNick"> </td>
+        </tr>
+       
+
+    </table>
+    <h3>회원 추가</h3>
+    <form action="insert" method="post">
+        <input type="text" name="id"> <br>
+        <input type="password" name="pw"> <br>
+        <input type="text" name="nick"> <br>
+        <input type="submit">
+        
+
+    </form>
+
+    <h3>회원 정보 수정</h3>
+    <form action="update" method="post">
+        <input type="text" name="id" id="updateId" readonly> <br>
+        <input type="password" name="pw" id="updatePw"> <br>
+        <input type="text" name="nick" id="updateNick"> <br>
+        <input type="submit">
+        
+    </form>
+
+
+    <script>
+        async function selectOne(id){
+
+            const reqURL = 'select/'+id //요청 URL
+
+            //fetch api -> res : promises 형태
+            //      요청                        결과1          
+            await fetch(reqURL).then((res)=> res.json())
+            // 결과2
+            .then((res2)=>{
+               // console.log(res2)
+                //res2.member -> array
+                //res.member[0]
+                document.getElementById('searchId').innerText=res2.member[0].id
+                document.getElementById('searchPw').innerText = res2.member[0].pw
+                document.getElementById('searchNick').innerText=res2.member[0].nick
+            })
+        }
+
+        function update(id,pw,nick){
+            document.getElementById('updateId').value = id
+            document.getElementById('updatePw').value = pw
+            document.getElementById('updateNick').value = nick
+
+        }
+    </script>
+</body>
+</html>
